@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Rent-A-Car</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: opacity 0.2s;
+        }
+
+        .nav a:hover {
+            opacity: 0.8;
+        }
+
+        .main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .profile-container {
+            border: 2px solid black;
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .profile-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .detail-row {
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #1a1a1a;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .rental-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .status {
+            color: #22c55e;
+        }
+
+        .update-button {
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .update-button:hover {
+            background-color: #333;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .main {
+                padding: 1rem;
+            }
+
+            .profile-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<header  class="header" th:replace="~{fragments/commons::header}">
+
+</header>
+
+    <main class="main">
+        <div class="profile-container">
+            <h1 class="profile-title">User Profile</h1>
+            
+            <section class="section">
+                <h2 class="section-title">User Details</h2>
+                <div class="detail-row">
+                    <span class="detail-label">Name:</span>
+                    <p th:text="${user.firstName + ' ' + user.lastName}"></p>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Email:</span>
+                    <p th:text="${user.email}"></p>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Phone number:</span>
+                    <p th:text="${user.phone}"></p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Rental History</h2>
+                <div class="rental-row">
+                    <div>Rental ID: 1234</div>
+                    <div class="status">Status: Active</div>
+                </div>
+            </section>
+
+            <button class="update-button">Update Profile</button>
+        </div>
+    </main>
+
+<footer class="footer" th:replace="~{fragments/commons::footer}">
+</footer>
+</body>
+</html>
