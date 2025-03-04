@@ -60,24 +60,6 @@ public class IndexController {
         }
         return mav;
     }
-//    @PostMapping("/login")
-//    public String login(@Valid LoginRequest loginRequest, BindingResult bindingResult, HttpSession session) {
-//        if (bindingResult.hasErrors()) {
-//            return "login";
-//        }
-//        User loggedInUser = userService.login(loginRequest);
-//        session.setAttribute("user_id", loggedInUser.getId());
-//
-//        return "redirect:/profile";
-//    }
-    @GetMapping("/profile")
-    public ModelAndView getProfilePage(@AuthenticationPrincipal AuthenticationDetails authenticationDetails) {
 
-        User user = userService.getById(authenticationDetails.getUserId());
 
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("profile");
-        mav.addObject("user", user);
-        return mav;
-    }
 }

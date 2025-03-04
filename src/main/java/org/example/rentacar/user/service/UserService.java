@@ -8,6 +8,7 @@ import org.example.rentacar.user.model.User;
 import org.example.rentacar.user.model.UserRole;
 import org.example.rentacar.user.repository.UserRepository;
 import org.example.rentacar.web.dto.LoginRequest;
+import org.example.rentacar.web.dto.ProfileUpdateRequest;
 import org.example.rentacar.web.dto.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -67,6 +68,27 @@ public class UserService implements UserDetailsService {
 
     public User getById(UUID userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(userId.toString()));
+    }
+
+    public User updateProfile(UUID userId, ProfileUpdateRequest profileUpdateRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(userId.toString()));
+
+        Optional<User> userWithEmail = userRepository.findByEmail(profileUpdateRequest.getEmail());
+        if (userWithEmail.isPresent()  && !userWithEmail.get().getId().equals(userId)) {
+            throw new DomainException("User with this email already exists");
+        }
+
+        Optional<User> userWithPhone = userRepository.findByPhone(profileUpdateRequest.getPhoneNumber());
+        if (userWithPhone.isPresent() && !userWithPhone.get().getId().equals(userId)) {
+            throw new DomainException("User with this phone number already exists");
+        }
+        user.setFirstName(profileUpdateRequest.getFirstName());
+        user.setLastName(profileUpdateRequest.getLastName());
+        user.setPhone(profileUpdateRequest.getPhoneNumber());
+        user.setEmail(profileUpdateRequest.getEmail());
+
+        return userRepository.save(user);
     }
 
 //    public User login(@Valid LoginRequest loginRequest) {

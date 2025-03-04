@@ -36,6 +36,13 @@
         .nav {
             display: flex;
             gap: 2rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav li {
+            list-style-type: none;
         }
 
         .nav a {
@@ -77,6 +84,8 @@
             font-size: 1.125rem;
             font-weight: 500;
             margin-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 0.5rem;
         }
 
         .detail-row {
@@ -94,12 +103,56 @@
         .rental-row {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 1rem 0;
             border-bottom: 1px solid #e0e0e0;
         }
+        
+        .rental-details {
+            flex-grow: 1;
+        }
+        
+        .rental-dates {
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            color: #666;
+        }
+        
+        .car-info {
+            font-weight: 500;
+        }
 
         .status {
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .status-reserved {
+            background-color: #f0f4ff;
+            color: #3b82f6;
+        }
+        
+        .status-active {
+            background-color: #ecfdf5;
             color: #22c55e;
+        }
+        
+        .status-completed {
+            background-color: #f4f4f5;
+            color: #71717a;
+        }
+        
+        .status-cancelled {
+            background-color: #fef2f2;
+            color: #ef4444;
+        }
+        
+        .no-rentals {
+            color: #666;
+            font-style: italic;
+            padding: 1rem 0;
         }
 
         .update-button {
@@ -111,10 +164,25 @@
             cursor: pointer;
             font-size: 0.875rem;
             transition: background-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .update-button:hover {
             background-color: #333;
+        }
+        
+        .alert {
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .alert-success {
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #047857;
         }
 
         .footer {
@@ -155,33 +223,59 @@
 
     <main class="main">
         <div class="profile-container">
-            <h1 class="profile-title">User Profile</h1>
+            <h1 class="profile-title" th:text="${user.username} + ' Profile'"></h1>
+            
+            <!-- Display success message if exists -->
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
             
             <section class="section">
                 <h2 class="section-title">User Details</h2>
                 <div class="detail-row">
                     <span class="detail-label">Name:</span>
-                    <p th:text="${user.firstName + ' ' + user.lastName}"></p>
+                    <span th:text="${user.firstName + ' ' + user.lastName}"></span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Email:</span>
-                    <p th:text="${user.email}"></p>
+                    <span th:text="${user.email}"></span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Phone number:</span>
-                    <p th:text="${user.phone}"></p>
+                    <span th:text="${user.phone}"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Username:</span>
+                    <span th:text="${user.username}"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Account type:</span>
+                    <span th:text="${user.role}"></span>
                 </div>
             </section>
 
             <section class="section">
                 <h2 class="section-title">Rental History</h2>
-                <div class="rental-row">
-                    <div>Rental ID: 1234</div>
-                    <div class="status">Status: Active</div>
+                <div th:if="${user.rentals != null && !user.rentals.isEmpty()}">
+                    <div class="rental-row" th:each="rental : ${user.rentals}">
+                        <div class="rental-details">
+                            <div class="car-info" th:text="${rental.car.brand + ' ' + rental.car.model + ' (' + rental.car.year + ')'}"></div>
+                            <div class="rental-dates">
+                                <span th:text="${#temporals.format(rental.startDate, 'dd MMM yyyy')}"></span> - 
+                                <span th:text="${#temporals.format(rental.endDate, 'dd MMM yyyy')}"></span>
+                            </div>
+                        </div>
+                        <div 
+                            class="status" 
+                            th:classappend="${'status-' + #strings.toLowerCase(rental.status)}"
+                            th:text="${rental.status}">
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${user.rentals == null || user.rentals.isEmpty()}" class="no-rentals">
+                    You have no rental history yet.
                 </div>
             </section>
 
-            <button class="update-button">Update Profile</button>
+            <a href="/profile/edit" class="update-button">Update Profile</a>
         </div>
     </main>
 
