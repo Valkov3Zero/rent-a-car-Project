@@ -1,17 +1,14 @@
 package org.example.rentacar.user.service;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.example.rentacar.exception.DomainException;
 import org.example.rentacar.security.AuthenticationDetails;
 import org.example.rentacar.user.model.User;
 import org.example.rentacar.user.model.UserRole;
 import org.example.rentacar.user.repository.UserRepository;
-import org.example.rentacar.web.dto.LoginRequest;
 import org.example.rentacar.web.dto.ProfileUpdateRequest;
 import org.example.rentacar.web.dto.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
