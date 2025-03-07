@@ -91,19 +91,5 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-//    public User login(@Valid LoginRequest loginRequest) {
-//        Optional<User> userOptional = userRepository.findByUsername(loginRequest.getUsername());
-//        log.info("Attempting login for email: {}", loginRequest.getUsername());
-//        if (userOptional.isEmpty()) {
-//            log.warn("User not found with email: {}", loginRequest.getUsername());
-//            throw new UsernameNotFoundException(loginRequest.getUsername());
-//        }
-//        User user = userOptional.get();
-//        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-//            log.warn("Incorrect password for user: {}", loginRequest.getUsername());
-//            throw new BadCredentialsException("Wrong password");
-//        }
-//        log.info("Login successful for user: {}", loginRequest.getUsername());
-//        return user;
-//    }
+
 }
