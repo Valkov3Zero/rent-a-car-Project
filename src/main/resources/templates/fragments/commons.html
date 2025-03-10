@@ -67,6 +67,9 @@
     <header class="header">
         <a href="/" class="logo">Rent-A-Car</a>
         <nav class="nav">
+            <li th:if="${user != null && user.role.name() == 'ADMIN'}">
+                <a href="/admin/dashboard" style="color: #fbbf24; font-weight: 500;">Admin</a>
+            </li>
             <li>
             <a href="/">Home</a>
             </li>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Cars - Rent-A-Car</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav li {
+            list-style-type: none;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: opacity 0.2s;
+        }
+
+        .nav a:hover {
+            opacity: 0.8;
+        }
+
+        .main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .page-description {
+            color: #4b5563;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .filters {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filters-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .filter-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 0.875rem;
+        }
+
+        .button-primary {
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .button-primary:hover {
+            background-color: #333;
+        }
+
+        .cars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .car-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .car-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .car-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .car-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .car-details {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .car-brand-model {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .car-year-plate {
+            color: #4b5563;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .car-price {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .car-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-available {
+            background-color: #d1fae5;
+            color: #047857;
+        }
+
+        .status-rented {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .status-maintenance {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .car-actions {
+            margin-top: auto;
+        }
+
+        .button-view {
+            width: 100%;
+            display: inline-block;
+            text-align: center;
+            padding: 0.75rem 1rem;
+            background-color: #1a1a1a;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .button-view:hover {
+            background-color: #333;
+        }
+
+        .no-cars {
+            padding: 3rem;
+            text-align: center;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-cars-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .no-cars-message {
+            color: #4b5563;
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .alert-success {
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #047857;
+        }
+        
+        .alert-error {
+            background-color: #fef2f2;
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                padding: 1rem;
+            }
+
+            .filter-form {
+                grid-template-columns: 1fr;
+            }
+
+            .cars-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header" th:replace="~{fragments/commons::header}"></header>
+
+    <main class="main">
+        <!-- Alert messages -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+        
+        <div class="page-header">
+            <h1 class="page-title">Browse Our Cars</h1>
+            <p class="page-description">Find the perfect car for your needs from our wide selection.</p>
+        </div>
+        
+        <!-- Future feature: Filter form 
+        <div class="filters">
+            <h2 class="filters-title">Filter Cars</h2>
+            <form class="filter-form" action="/cars" method="get">
+                <div>
+                    <div class="form-group">
+                        <label class="form-label" for="brand">Brand</label>
+                        <select id="brand" name="brand" class="form-select">
+                            <option value="">All Brands</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="model">Model</label>
+                        <input type="text" id="model" name="model" class="form-control" placeholder="Any model">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label class="form-label" for="year">Year</label>
+                        <select id="year" name="year" class="form-select">
+                            <option value="">Any Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="status">Status</label>
+                        <select id="status" name="status" class="form-select">
+                            <option value="">Any Status</option>
+                            <option value="AVAILABLE">Available</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label class="form-label" for="minPrice">Min Price</label>
+                        <input type="number" id="minPrice" name="minPrice" class="form-control" placeholder="$0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="maxPrice">Max Price</label>
+                        <input type="number" id="maxPrice" name="maxPrice" class="form-control" placeholder="No limit">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label class="form-label" for="sort">Sort By</label>
+                        <select id="sort" name="sort" class="form-select">
+                            <option value="price_asc">Price: Low to High</option>
+                            <option value="price_desc">Price: High to Low</option>
+                            <option value="year_desc">Year: Newest First</option>
+                            <option value="year_asc">Year: Oldest First</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="button-primary" style="margin-top: 1.5rem;">Apply Filters</button>
+                </div>
+            </form>
+        </div>
+        -->
+        
+        <div th:if="${cars != null && !cars.isEmpty()}" class="cars-grid">
+            <div th:each="car : ${cars}" class="car-card">
+                <div class="car-image">
+                    <img th:if="${car.image != null && !car.image.isEmpty()}" th:src="${car.image}" alt="Car Image">
+                    <img th:if="${car.image == null || car.image.isEmpty()}" src="https://via.placeholder.com/300x200?text=No+Image+Available" alt="No Image Available">
+                </div>
+                <div class="car-details">
+                    <h2 class="car-brand-model" th:text="${car.brand + ' ' + car.model}">Toyota Camry</h2>
+                    <p class="car-year-plate" th:text="${car.year + ' • ' + car.licensePlate}">2023 • ABC123</p>
+                    
+                    <p class="car-price" th:text="${'$' + car.pricePerDay + ' per day'}">$50.00 per day</p>
+                    
+                    <span class="car-status status-available" th:if="${car.status.name() == 'AVAILABLE'}" th:text="${car.status}">Available</span>
+                    <span class="car-status status-rented" th:if="${car.status.name() == 'RENTED'}" th:text="${car.status}">Rented</span>
+                    <span class="car-status status-maintenance" th:if="${car.status.name() == 'MAINTENANCE'}" th:text="${car.status}">Maintenance</span>
+                    
+                    <div class="car-actions">
+                        <a th:href="@{/cars/{id}(id=${car.id})}" class="button-view">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div th:if="${cars == null || cars.isEmpty()}" class="no-cars">
+            <h2 class="no-cars-title">No cars available</h2>
+            <p class="no-cars-message">There are currently no cars available for rent. Please check back later.</p>
+        </div>
+    </main>
+
+    <footer class="footer" th:replace="~{fragments/commons::footer}"></footer>
+</body>
+</html> 

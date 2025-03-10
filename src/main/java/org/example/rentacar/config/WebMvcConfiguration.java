@@ -19,7 +19,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 .authorizeHttpRequests(matchers -> matchers
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/","/register").permitAll()
-                        //.requestMatchers("/adminDashboard").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
@@ -35,5 +35,27 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         ;
 
         return http.build();
+
+//        http
+//                .authorizeHttpRequests(matchers -> matchers
+//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+//                        .requestMatchers("/","/register", "/login", "/css/**", "/js/**", "/images/**").permitAll()
+//                        .requestMatchers("/cars", "/cars/**").authenticated() // Allow both CUSTOMER and ADMIN access to all car URLs
+//                        .requestMatchers("/admin/**").hasAuthority("ADMIN") // Restrict admin URLs to ADMIN users only
+//                        .anyRequest().authenticated())
+//                .formLogin(formLogin -> formLogin
+//                        .loginPage("/login")
+//                        .usernameParameter("username")
+//                        .passwordParameter("password")
+//                        .defaultSuccessUrl("/profile",true)
+//                        .failureUrl("/login?error")
+//                        .permitAll()
+//                )
+//                .logout(logout -> logout
+//                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))
+//                        .logoutSuccessUrl("/"))
+//        ;
+//
+//        return http.build();
     }
 }
