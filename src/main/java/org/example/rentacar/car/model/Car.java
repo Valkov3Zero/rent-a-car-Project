@@ -38,6 +38,9 @@ public class Car {
     @Column(nullable = false)
     private BigDecimal pricePerDay;
 
+    @Column(length = 1000)
+    private String description;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
