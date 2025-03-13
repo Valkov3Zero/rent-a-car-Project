@@ -32,5 +32,5 @@ public class Location {
     private List<Rental> rentalsStartingHere;
 
     @OneToMany(mappedBy = "dropOffLocation")
-    private List<Rental> retalsEndingHere;
+    private List<Rental> rentalsEndingHere;
 }
