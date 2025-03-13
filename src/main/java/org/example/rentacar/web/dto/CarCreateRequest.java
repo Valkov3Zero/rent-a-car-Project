@@ -37,7 +37,7 @@ public class CarCreateRequest {
     @NotNull(message = "Status is required")
     private Status status;
 
-    private String imageURL;
+    private String imageUrl;
 
     private String description;
 }

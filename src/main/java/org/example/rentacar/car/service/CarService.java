@@ -1,8 +1,10 @@
 package org.example.rentacar.car.service;
 
+import jakarta.transaction.Transactional;
 import org.example.rentacar.car.model.Car;
 import org.example.rentacar.car.repository.CarRepository;
 import org.example.rentacar.exception.DomainException;
+import org.example.rentacar.rental.model.RentalStatus;
 import org.example.rentacar.web.dto.CarCreateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class CarService {
                 .orElseThrow(() -> new DomainException("Car not found"));
     }
 
+    @Transactional
     public Car createCar(CarCreateRequest carCreateRequest) {
         Optional<Car> existingCarOpt = carRepository.findByLicensePlate(carCreateRequest.getLicensePlate());
         if (existingCarOpt.isPresent()) {
@@ -42,10 +45,23 @@ public class CarService {
                 .licensePlate(carCreateRequest.getLicensePlate())
                 .pricePerDay(carCreateRequest.getPricePerDay())
                 .status(carCreateRequest.getStatus())
-                .image(carCreateRequest.getImageURL())
+                .image(carCreateRequest.getImageUrl())
                 .description(carCreateRequest.getDescription())
                 .build();
 
         return carRepository.save(newCar);
+    }
+
+    @Transactional
+    public void deleteCar(Long id) {
+        Car car = getCarById(id);
+
+        if (car.getRentals() != null && car.getRentals().stream().anyMatch(rental ->
+                rental.getStatus() == RentalStatus.ACTIVE ||
+                rental.getStatus() == RentalStatus.RESERVED ||
+                rental.getStatus() == RentalStatus.RESERVED_PAID)) {
+            throw new DomainException("Cannot delete car with active rental");
+        }
+        carRepository.delete(car);
     }
 }

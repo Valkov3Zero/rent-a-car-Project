@@ -1,5 +1,5 @@
 package org.example.rentacar.rental.model;
 
 public enum RentalStatus {
-    RESERVED,ACTIVE,COMPLETED,CANCELLED
+    RESERVED,RESERVED_PAID,ACTIVE,COMPLETED,CANCELLED
 }
