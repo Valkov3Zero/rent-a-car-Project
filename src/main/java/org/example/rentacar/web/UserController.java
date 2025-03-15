@@ -14,14 +14,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -108,6 +107,24 @@ public class UserController {
         } catch (DomainException e){
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage","An error occurred: " + e.getMessage());
+        }
+        return "redirect:/profile";
+    }
+
+    @PostMapping("/cards/{cardId}/add-funds")
+    public String addFunds(@PathVariable UUID cardId,
+                           @AuthenticationPrincipal AuthenticationDetails authenticationDetails,
+                           RedirectAttributes redirectAttributes){
+        try{
+            User user = userService.getById(authenticationDetails.getUserId());
+            BigDecimal amount = new BigDecimal("10000");
+            creditCardService.addFunds(cardId,amount,user);
+
+            redirectAttributes.addFlashAttribute("successMessage", "10 000$ added successfully");
+        }catch (DomainException e){
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }catch (Exception e){
             redirectAttributes.addFlashAttribute("errorMessage","An error occurred: " + e.getMessage());
         }
         return "redirect:/profile";

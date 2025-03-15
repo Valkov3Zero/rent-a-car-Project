@@ -3,6 +3,7 @@ package org.example.rentacar.car.service;
 import jakarta.transaction.Transactional;
 import org.example.rentacar.car.model.Car;
 import org.example.rentacar.car.repository.CarRepository;
+import org.example.rentacar.creditCard.repository.CreditCardRepository;
 import org.example.rentacar.exception.DomainException;
 import org.example.rentacar.rental.model.RentalStatus;
 import org.example.rentacar.web.dto.CarCreateRequest;
@@ -12,14 +13,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class CarService {
 
     private final CarRepository carRepository;
 
+
     @Autowired
-    public CarService(CarRepository carRepository) {
+    public CarService(CarRepository carRepository, CreditCardRepository creditCardRepository) {
         this.carRepository = carRepository;
+
     }
 
     public List<Car> getAllCars() {
@@ -64,4 +68,5 @@ public class CarService {
         }
         carRepository.delete(car);
     }
+
 }

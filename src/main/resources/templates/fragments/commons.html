@@ -73,6 +73,9 @@
             <li th:unless="${user}">
             <a href="/">Home</a>
             </li>
+            <li th:if="${user}">
+                <a href="/profile">Profile</a>
+            </li>
             <li>
             <a href="/cars">Cars</a>
             </li>

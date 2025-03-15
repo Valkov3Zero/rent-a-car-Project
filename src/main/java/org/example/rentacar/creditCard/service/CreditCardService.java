@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CreditCardService {
@@ -43,4 +44,17 @@ public class CreditCardService {
 
         return creditCardRepository.save(newCard);
     }
+    @Transactional
+    public CreditCard addFunds(UUID cardId, BigDecimal amount, User user) {
+        CreditCard card = creditCardRepository.findById(cardId)
+                .orElseThrow(() -> new DomainException("Card not found"));
+
+        if (!card.getUser().getId().equals(user.getId())) {
+            throw new DomainException("User is not allowed to add funds");
+        }
+        BigDecimal newAmount = card.getAmount().add(amount);
+        card.setAmount(newAmount);
+        return creditCardRepository.save(card);
+    }
+
 }
