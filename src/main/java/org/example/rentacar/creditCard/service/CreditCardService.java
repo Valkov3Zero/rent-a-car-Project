@@ -28,7 +28,7 @@ public class CreditCardService {
     }
 
     @Transactional
-    public CreditCard addCreditCard(CreditCardRequest creditCardRequest, User user) {
+    public void addCreditCard(CreditCardRequest creditCardRequest, User user) {
         boolean cardExists = creditCardRepository.findByUser(user).stream()
                 .anyMatch(card -> card.getCardNumber().equals(creditCardRequest.getCardNumber()));
         if (cardExists) {
@@ -42,10 +42,10 @@ public class CreditCardService {
                 .user(user)
                 .build();
 
-        return creditCardRepository.save(newCard);
+        creditCardRepository.save(newCard);
     }
     @Transactional
-    public CreditCard addFunds(UUID cardId, BigDecimal amount, User user) {
+    public void addFunds(UUID cardId, BigDecimal amount, User user) {
         CreditCard card = creditCardRepository.findById(cardId)
                 .orElseThrow(() -> new DomainException("Card not found"));
 
@@ -54,7 +54,18 @@ public class CreditCardService {
         }
         BigDecimal newAmount = card.getAmount().add(amount);
         card.setAmount(newAmount);
-        return creditCardRepository.save(card);
+        creditCardRepository.save(card);
+    }
+    @Transactional
+    public void deleteCreditCard(UUID cardId, User user) {
+        CreditCard card = creditCardRepository.findById(cardId)
+                .orElseThrow(() -> new DomainException("Credit card not found"));
+
+        if (!card.getUser().getId().equals(user.getId())) {
+            throw new DomainException("You are not authorized to delete this card");
+        }
+
+        creditCardRepository.delete(card);
     }
 
 }

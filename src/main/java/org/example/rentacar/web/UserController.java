@@ -129,4 +129,25 @@ public class UserController {
         }
         return "redirect:/profile";
     }
+
+    @PostMapping("/cards/{cardId}/delete")
+    public String deleteCreditCard(
+            @PathVariable UUID cardId,
+            @AuthenticationPrincipal AuthenticationDetails authenticationDetails,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            User user = userService.getById(authenticationDetails.getUserId());
+
+            creditCardService.deleteCreditCard(cardId, user);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Credit card deleted successfully!");
+        } catch (DomainException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred: " + e.getMessage());
+        }
+
+        return "redirect:/profile";
+    }
 }

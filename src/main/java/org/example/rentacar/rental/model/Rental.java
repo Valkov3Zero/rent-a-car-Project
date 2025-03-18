@@ -48,4 +48,7 @@ public class Rental {
     @ManyToOne
     @JoinColumn(name = "dropoff_location_id", nullable = false)
     private Location dropOffLocation;
+
+    @Column
+    private LocalDate createdAt;
 }

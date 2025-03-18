@@ -2,6 +2,7 @@ package org.example.rentacar.car.service;
 
 import jakarta.transaction.Transactional;
 import org.example.rentacar.car.model.Car;
+import org.example.rentacar.car.model.Status;
 import org.example.rentacar.car.repository.CarRepository;
 import org.example.rentacar.creditCard.repository.CreditCardRepository;
 import org.example.rentacar.exception.DomainException;
@@ -69,4 +70,9 @@ public class CarService {
         carRepository.delete(car);
     }
 
+    public Car updateCarStatus(long id, Status status) {
+        Car car = getCarById(id);
+        car.setStatus(status);
+        return carRepository.save(car);
+    }
 }
