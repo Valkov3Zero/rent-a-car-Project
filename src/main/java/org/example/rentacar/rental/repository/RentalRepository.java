@@ -23,4 +23,6 @@ public interface RentalRepository extends JpaRepository<Rental, UUID> {
             @Param("cardId") long carId,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
+
+    List<Rental> findByUserId(UUID userId);
 }

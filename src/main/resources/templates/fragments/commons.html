@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fragments</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <style>
         * {
             margin: 0;
@@ -29,6 +30,13 @@
         .nav {
             display: flex;
             gap: 2rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav li {
+            list-style-type: none;
         }
 
         .nav a {
@@ -67,14 +75,15 @@
     <header class="header">
         <a href="/" class="logo">Rent-A-Car</a>
         <nav class="nav">
-            <li th:if="${user != null && user.role.name() == 'ADMIN'}">
-                <a href="/admin/dashboard" style="color: #fbbf24; font-weight: 500;">Admin</a>
-            </li>
+            
             <li th:unless="${user}">
             <a href="/">Home</a>
             </li>
             <li th:if="${user}">
                 <a href="/profile">Profile</a>
+            </li>
+            <li th:if="${user}">
+                <a href="/rentals">Rentals</a>
             </li>
             <li>
             <a href="/cars">Cars</a>
@@ -85,6 +94,9 @@
             <li>
             <a href="/contact">Contact</a>
             </li>
+            <li th:if="${user != null && user.role.name() == 'ADMIN'}">
+            <a href="/admin/dashboard" style="color: #fbbf24; font-weight: 500;">Admin</a>
+            </li>
             <li th:unless="${user}">
             <a th:href="@{/register}">Register</a>
             </li>
@@ -94,6 +106,7 @@
             <li th:if="${user}">
                 <a href="/logout">Logout</a>
             </li>
+            
         </nav>
     </header>
     <footer class="footer">

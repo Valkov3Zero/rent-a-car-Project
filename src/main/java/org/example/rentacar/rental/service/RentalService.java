@@ -1,8 +1,5 @@
 package org.example.rentacar.rental.service;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
 import org.example.rentacar.car.model.Car;
 import org.example.rentacar.car.model.Status;
 import org.example.rentacar.car.service.CarService;
@@ -85,5 +82,9 @@ public class RentalService {
         if (end.isBefore(start)) {
             throw new DomainException("End date must be after start date");
         }
+    }
+
+    public List<Rental> getUserRentals(UUID userId) {
+        return rentalRepository.findByUserId(userId);
     }
 }

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Rent-A-Car</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav li {
+            list-style-type: none;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover {
+            color: #d1d5db;
+        }
+
+        .main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .payment-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .rental-details {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .rental-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .rental-dates {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .rental-price {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .payment-form-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-error {
+            color: #ef4444;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .button-primary {
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .button-primary:hover {
+            background-color: #333;
+        }
+
+        .button-secondary {
+            background-color: white;
+            color: #1a1a1a;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-right: 0.5rem;
+        }
+
+        .button-secondary:hover {
+            background-color: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .alert {
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .alert-success {
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #047857;
+        }
+        
+        .alert-error {
+            background-color: #fef2f2;
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+        
+        .alert-info {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #1e40af;
+            font-size: 0.75rem;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .payment-option {
+            margin-bottom: 2rem;
+        }
+
+        .payment-option-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-list {
+            margin-bottom: 1rem;
+        }
+
+        .card-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .card-item:hover {
+            border-color: #9ca3af;
+            background-color: #f9fafb;
+        }
+
+        .card-item.selected {
+            border-color: #1a1a1a;
+            background-color: #f9fafb;
+        }
+
+        .card-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-brand-number {
+            font-weight: 500;
+        }
+
+        .card-expiry {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .card-amount {
+            font-weight: 600;
+        }
+
+        .or-divider {
+            text-align: center;
+            position: relative;
+            margin: 1.5rem 0;
+        }
+
+        .or-divider::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background-color: #e5e7eb;
+        }
+
+        .or-text {
+            position: relative;
+            display: inline-block;
+            padding: 0 1rem;
+            background-color: white;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header" th:replace="~{fragments/commons::header}"></header>
+
+    <main class="main">
+        <h1 class="page-title">Payment</h1>
+        
+        <!-- Alert messages -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+        
+        <div class="payment-card">
+            <div class="rental-details">
+                <h2 class="rental-title" th:text="${rental.car.brand + ' ' + rental.car.model}">Toyota Camry</h2>
+                <p class="rental-dates">
+                    <span th:text="${#temporals.format(rental.startDate, 'MMM dd, yyyy')}">Jan 01, 2023</span>
+                    to
+                    <span th:text="${#temporals.format(rental.endDate, 'MMM dd, yyyy')}">Jan 05, 2023</span>
+                </p>
+                <p class="rental-price" th:text="${'Total Amount: $' + rental.totalPrice}">Total: $250.00</p>
+                <!-- Debug information -->
+                <p><small th:text="${'Rental ID: ' + rental.id}">Rental ID: 12345</small></p>
+            </div>
+            
+            <h3 class="payment-form-title">Enter Payment Details</h3>
+            
+            <form th:action="@{/payments/process}" method="post" th:object="${paymentRequest}">
+                <!-- Add CSRF token -->
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="hidden" th:field="*{rentalId}" />
+                
+                <!-- Debug information for form -->
+                
+                
+                <div class="form-group">
+                    <label class="form-label" for="paymentMethod">Payment Method</label>
+                    <select id="paymentMethod" th:field="*{paymentMethod}" class="form-control" required>
+                        <option value="">Select payment method</option>
+                        <option value="CREDIT_CARD">Credit Card</option>
+                        <option value="DEBIT_CARD">Debit Card</option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('paymentMethod')}" class="form-error" th:errors="*{paymentMethod}"></p>
+                </div>
+                
+                <!-- Payment with existing card -->
+                <div class="payment-option" th:if="${not #lists.isEmpty(creditCards)}">
+                    <h4 class="payment-option-title">Pay with your saved cards</h4>
+                    
+                    <div class="card-list">
+                        <div th:each="card : ${creditCards}" 
+                             th:id="${'card-' + card.id}"
+                             class="card-item"
+                             th:data-card-id="${card.id}"
+                             onclick="selectCard(this)">
+                            <div class="card-details">
+                                <div>
+                                    <div class="card-brand-number">
+                                        <span th:text="${'**** **** **** ' + #strings.substring(card.cardNumber, #strings.length(card.cardNumber) - 4)}">**** **** **** 1234</span>
+                                    </div>
+                                    <div class="card-expiry" th:text="${'Expires: ' + card.expirationDate}">Expires: 12/24</div>
+                                </div>
+                                <div class="card-amount" th:text="${'Balance: $' + card.amount}">Balance: $500</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" th:field="*{selectedCardId}" id="selectedCardId" />
+                </div>
+            
+                
+                <div style="margin-top: 1.5rem; display: flex;">
+                    <a th:href="@{/rentals}" class="button-secondary">Cancel</a>
+                    <button type="submit" class="button-primary">Process Payment</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer" th:replace="~{fragments/commons::footer}"></footer>
+    
+    <script>
+        function selectCard(element) {
+            // Remove selected class from all cards
+            document.querySelectorAll('.card-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            element.classList.add('selected');
+            
+            // Update hidden input with card ID
+            document.getElementById('selectedCardId').value = element.getAttribute('data-card-id');
+            
+            // Clear manual card input fields
+            document.getElementById('cardNumber').value = '';
+            document.getElementById('cardholderName').value = '';
+            document.getElementById('expirationDate').value = '';
+            document.getElementById('cvv').value = '';
+        }
+        
+        // Clear the selected card when manual card details are entered
+        ['cardNumber', 'cardholderName', 'expirationDate', 'cvv'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                document.getElementById('selectedCardId').value = '';
+                document.querySelectorAll('.card-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

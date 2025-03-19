@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Rentals - Rent-A-Car</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav li {
+            list-style-type: none;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover {
+            color: #d1d5db;
+        }
+
+        .main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .alert {
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .alert-success {
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #047857;
+        }
+        
+        .alert-error {
+            background-color: #fef2f2;
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .rentals-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .rentals-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .rentals-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .rental-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rental-image {
+            height: 160px;
+            overflow: hidden;
+        }
+
+        .rental-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .rental-info {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rental-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .rental-dates {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .rental-price {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .rental-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .status-reserved {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+        }
+        
+        .status-paid {
+            background-color: #f0fdf4;
+            color: #15803d;
+        }
+
+        .status-active {
+            background-color: #ecfdf5;
+            color: #047857;
+        }
+
+        .status-completed {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .status-cancelled {
+            background-color: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .rental-locations {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .rental-actions {
+            margin-top: auto;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .button-primary {
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .button-primary:hover {
+            background-color: #333;
+        }
+
+        .button-secondary {
+            background-color: white;
+            color: #1a1a1a;
+            border: 1px solid #d1d5db;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .button-secondary:hover {
+            background-color: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+        .button-danger {
+            background-color: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #ef4444;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .button-danger:hover {
+            background-color: #fee2e2;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header" th:replace="~{fragments/commons::header}"></header>
+
+    <main class="main">
+        <h1 class="page-title">My Rentals</h1>
+        
+        <!-- Alert messages -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+        
+        <!-- Empty state if no rentals -->
+        <div th:if="${#lists.isEmpty(rentals)}" class="empty-state">
+            <h3>You don't have any rentals yet</h3>
+            <p>Browse our available cars and book your first rental today!</p>
+            <a th:href="@{/cars}" class="button-primary">Browse Cars</a>
+        </div>
+        
+        <!-- Rentals list -->
+        <div th:if="${!#lists.isEmpty(rentals)}" class="rentals-container">
+            <div th:each="rental : ${rentals}" class="rental-card">
+                <div class="rental-image">
+                    <img th:if="${rental.car.image != null && !rental.car.image.isEmpty()}" 
+                         th:src="${rental.car.image}" alt="Car Image">
+                    <img th:if="${rental.car.image == null || rental.car.image.isEmpty()}" 
+                         src="https://via.placeholder.com/600x400?text=No+Image+Available" alt="No Image Available">
+                </div>
+                
+                <div class="rental-info">
+                    <h2 class="rental-title" th:text="${rental.car.brand + ' ' + rental.car.model}">Toyota Camry</h2>
+                    
+                    <p class="rental-dates">
+                        <span th:text="${#temporals.format(rental.startDate, 'MMM dd, yyyy')}">Jan 01, 2023</span>
+                        to
+                        <span th:text="${#temporals.format(rental.endDate, 'MMM dd, yyyy')}">Jan 05, 2023</span>
+                    </p>
+                    
+                    <p class="rental-price" th:text="${'Total: $' + rental.totalPrice}">Total: $250.00</p>
+                    
+                    <span class="rental-status status-reserved" th:if="${rental.status.name() == 'RESERVED'}" th:text="${rental.status}">Reserved</span>
+                    <span class="rental-status status-paid" th:if="${rental.status.name() == 'RESERVED_PAID'}" th:text="'Reserved (Paid)'">Reserved (Paid)</span>
+                    <span class="rental-status status-active" th:if="${rental.status.name() == 'ACTIVE'}" th:text="${rental.status}">Active</span>
+                    <span class="rental-status status-completed" th:if="${rental.status.name() == 'COMPLETED'}" th:text="${rental.status}">Completed</span>
+                    <span class="rental-status status-cancelled" th:if="${rental.status.name() == 'CANCELLED'}" th:text="${rental.status}">Cancelled</span>
+                    
+                    <div class="rental-locations">
+                        <div>
+                            <strong>Pickup:</strong> 
+                            <span th:text="${rental.pickupLocation.name + ' (' + rental.pickupLocation.city + ')'}">
+                                New York Downtown (NEW_YORK)
+                            </span>
+                        </div>
+                        <div>
+                            <strong>Dropoff:</strong> 
+                            <span th:text="${rental.dropOffLocation.name + ' (' + rental.dropOffLocation.city + ')'}">
+                                New York Downtown (NEW_YORK)
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="rental-actions">
+                        <a th:href="@{/rentals/{id}(id=${rental.id})}" class="button-secondary">View Details</a>
+                        
+                        <!-- Show Pay button for Reserved rentals that need payment -->
+                        <a th:if="${rental.status.name() == 'RESERVED'}" 
+                           th:href="@{/payments/process/{id}(id=${rental.id})}" 
+                           class="button-primary">Pay Now</a>
+                        
+                        <!-- Show Start button for Reserved and Paid rentals that can be started -->
+                        <form th:if="${(rental.status.name() == 'RESERVED_PAID' || rental.status.name() == 'RESERVED') && !rental.startDate.isAfter(#temporals.createToday())}" 
+                              th:action="@{/rentals/{id}/start(id=${rental.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="button-primary">Start Rental</button>
+                        </form>
+                        
+                        <!-- Show Complete button for Active rentals -->
+                        <form th:if="${rental.status.name() == 'ACTIVE'}" 
+                              th:action="@{/rentals/{id}/complete(id=${rental.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="button-primary">Complete Rental</button>
+                        </form>
+                        
+                        <!-- Show Cancel button for Reserved rentals -->
+                        <form th:if="${rental.status.name() == 'RESERVED' || rental.status.name() == 'RESERVED_PAID'}" 
+                              th:action="@{/rentals/{id}/cancel(id=${rental.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="button-danger">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" th:replace="~{fragments/commons::footer}"></footer>
+</body>
+</html> 
