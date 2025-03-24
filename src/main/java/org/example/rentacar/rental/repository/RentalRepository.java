@@ -20,7 +20,7 @@ public interface RentalRepository extends JpaRepository<Rental, UUID> {
             "AND r.status IN ('RESERVED', 'ACTIVE', 'RESERVED_PAID') " +
             "AND ((r.startDate <= :endDate) AND (r.endDate >= :startDate))")
     List<Rental> findOverlappingRentals(
-            @Param("cardId") long carId,
+            @Param("carId") long carId,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
 

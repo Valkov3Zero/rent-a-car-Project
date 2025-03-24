@@ -3,6 +3,7 @@ package org.example.rentacar.user.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.rentacar.creditCard.model.CreditCard;
+import org.example.rentacar.payment.model.Payment;
 import org.example.rentacar.rental.model.Rental;
 
 import java.util.List;
@@ -47,6 +48,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<CreditCard> creditCards;
+
+    @OneToMany(mappedBy = "user")
+    private List<Payment> payments;
 
     public boolean isActive;
 

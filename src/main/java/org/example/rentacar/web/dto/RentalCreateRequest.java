@@ -33,6 +33,5 @@ public class RentalCreateRequest {
     @NotNull(message = "Dropoff location is required")
     private Long dropoffLocationId;
 
-    @NotNull
-    private LocalDate createAt;
+
 }

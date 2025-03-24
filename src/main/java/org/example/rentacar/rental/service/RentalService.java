@@ -84,7 +84,17 @@ public class RentalService {
         }
     }
 
+    public Rental updateRentalStatus(UUID rentalId, RentalStatus status) {
+        Rental rental = rentalRepository.findById(rentalId).orElseThrow(()->new DomainException("Rental not found"));
+        rental.setStatus(status);
+        return rentalRepository.save(rental);
+    }
+
     public List<Rental> getUserRentals(UUID userId) {
         return rentalRepository.findByUserId(userId);
+    }
+
+    public Rental getRentalById(UUID rentalId) {
+        return rentalRepository.findById(rentalId).orElseThrow(() -> new DomainException("Rental not found"));
     }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.rentacar.car.model.Car;
 import org.example.rentacar.location.model.Location;
+import org.example.rentacar.payment.model.Payment;
 import org.example.rentacar.user.model.User;
 
 import java.math.BigDecimal;
@@ -48,6 +49,9 @@ public class Rental {
     @ManyToOne
     @JoinColumn(name = "dropoff_location_id", nullable = false)
     private Location dropOffLocation;
+
+    @OneToOne(mappedBy = "rental")
+    private Payment payment;
 
     @Column
     private LocalDate createdAt;

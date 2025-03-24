@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>app</groupId>
-    <artifactId>CloseEncounters</artifactId>
+    <artifactId>RentACar</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>CloseEncounters</name>
-    <description>CloseEncounters</description>
+    <name>RentACar</name>
+    <description>RentACar</description>
     <url/>
     <licenses>
         <license/>
@@ -115,6 +115,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
             <version>3.4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>4.2.1</version>
         </dependency>
     </dependencies>
 
