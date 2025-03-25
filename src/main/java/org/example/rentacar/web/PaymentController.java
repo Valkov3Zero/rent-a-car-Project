@@ -1,8 +1,10 @@
 package org.example.rentacar.web;
 
+import jakarta.validation.Valid;
 import org.example.rentacar.creditCard.model.CreditCard;
 import org.example.rentacar.creditCard.service.CreditCardService;
 import org.example.rentacar.exception.DomainException;
+import org.example.rentacar.payment.model.Payment;
 import org.example.rentacar.payment.service.PaymentService;
 import org.example.rentacar.rental.model.Rental;
 import org.example.rentacar.rental.service.RentalService;
@@ -14,9 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -52,7 +53,13 @@ public class PaymentController {
                 return "redirect:/rentals";
             }
             List<CreditCard> userCreditCards = creditCardService.getUserCreditCards(user);
+            PaymentRequest paymentRequest = PaymentRequest.builder()
+                    .rentalId(rentalId)
+                    .selectedCardId(userCreditCards.get(0).getId())
+                    .build();
 
+
+            model.addAttribute("paymentRequest", paymentRequest);
             model.addAttribute("creditCards", userCreditCards);
             model.addAttribute("rental", rental);
             model.addAttribute("user", user);
@@ -65,5 +72,43 @@ public class PaymentController {
             redirectAttributes.addFlashAttribute("errorMessage",e.getMessage());
             return "redirect:/rentals";
         }
+    }
+
+    @PostMapping("/process")
+    public String processPayment (@Valid @ModelAttribute ("paymentRequest")PaymentRequest paymentRequest,
+                                  BindingResult bindingResult,
+                                  @AuthenticationPrincipal AuthenticationDetails authenticationDetails,
+                                  Model model,
+                                  RedirectAttributes redirectAttributes) {
+
+
+        if(bindingResult.hasErrors()){
+            User user = userService.getById(authenticationDetails.getUserId());
+
+            Rental rental = rentalService.getRentalById(paymentRequest.getRentalId());
+            List<CreditCard> userCreditCards = creditCardService.getUserCreditCards(user);
+
+            model.addAttribute("paymentRequest", paymentRequest);
+            model.addAttribute("creditCards", userCreditCards);
+            model.addAttribute("rental", rental);
+            model.addAttribute("user", user);
+            return "payment-form";
+        }
+
+
+        try {
+            Payment  payment = paymentService.processPayment(paymentRequest,userService.getById(authenticationDetails.getUserId()));
+            redirectAttributes.addFlashAttribute("successMessage","Payment processed successfully.");
+            return "redirect:/rentals";
+        }catch (DomainException e){
+            redirectAttributes.addFlashAttribute("errorMessage",e.getMessage());
+            return "redirect:/rentals";
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("errorMessage","Error processing payment "+e.getMessage());
+            return "redirect:/rentals";
+        }
+
+
+
     }
 }

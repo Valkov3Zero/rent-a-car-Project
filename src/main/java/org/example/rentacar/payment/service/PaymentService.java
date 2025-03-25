@@ -71,7 +71,7 @@ public class PaymentService {
         rentalService.updateRentalStatus(rental.getId(), RentalStatus.RESERVED_PAID);
 
 
-        return null;
+        return savedPayment;
     }
 
     public Optional<Payment> getPaymentByRental(Rental rental) {

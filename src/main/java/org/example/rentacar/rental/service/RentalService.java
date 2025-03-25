@@ -74,6 +74,49 @@ public class RentalService {
         return rentalRepository.save(rental);
     }
 
+    public void cancelRental(UUID rentalId, UUID userId) {
+        Rental rental = rentalRepository.findById(rentalId).orElseThrow(()->new DomainException("Rental not found"));
+        if(rental.getStartDate().isBefore(LocalDate.now()) || rental.getStatus() == RentalStatus.ACTIVE){
+            throw new DomainException("Cannot cancel an active rental");
+        }
+        rental.setStatus(RentalStatus.CANCELLED);
+
+        Car car = rental.getCar();
+        car.setStatus(Status.AVAILABLE);
+        carService.updateCarStatus(car.getId(),Status.AVAILABLE);
+
+        rentalRepository.save(rental);
+    }
+
+    public Rental startRental(UUID rentalId, UUID userId) {
+        Rental rental = rentalRepository.findById(rentalId)
+                .orElseThrow(() -> new DomainException("Rental not found"));
+        if (rental.getStatus() != RentalStatus.RESERVED_PAID){
+            throw new DomainException("Only paid rentals can be started");
+        }
+        if (rental.getStartDate().isAfter(LocalDate.now())) {
+            throw new DomainException("Cannot start a rental before its start date");
+        }
+        rental.setStatus(RentalStatus.ACTIVE);
+        return rentalRepository.save(rental);
+    }
+
+    public Rental completeRental(UUID rentalId, UUID userId) {
+        Rental rental = rentalRepository.findById(rentalId)
+                .orElseThrow(()->new DomainException("Rental not found"));
+
+        if (rental.getStatus() != RentalStatus.ACTIVE){
+            throw new DomainException("Only active rentals can be completed");
+        }
+        rental.setStatus(RentalStatus.COMPLETED);
+
+        Car car = rental.getCar();
+        car.setStatus(Status.AVAILABLE);
+        carService.updateCarStatus(car.getId(),Status.AVAILABLE);
+
+        return rentalRepository.save(rental);
+    }
+
     private void validateDates(LocalDate start, LocalDate end) {
         LocalDate today = LocalDate.now();
         if (start.isBefore(today)) {
