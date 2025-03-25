@@ -8,6 +8,7 @@ import org.example.rentacar.exception.DomainException;
 import org.example.rentacar.location.model.City;
 import org.example.rentacar.location.model.Location;
 import org.example.rentacar.location.service.LocationService;
+import org.example.rentacar.rental.service.RentalSchedulingService;
 import org.example.rentacar.security.AuthenticationDetails;
 import org.example.rentacar.user.model.User;
 import org.example.rentacar.user.model.UserRole;
@@ -34,13 +35,15 @@ public class AdminController {
     private final UserService userService;
     private final CarService carService;
     private final LocationService locationService;
+    private final RentalSchedulingService rentalSchedulingService;
 
 
     @Autowired
-    public AdminController(UserService userService, CarService carService, LocationService locationService) {
+    public AdminController(UserService userService, CarService carService, LocationService locationService, RentalSchedulingService rentalSchedulingService) {
         this.userService = userService;
         this.carService = carService;
         this.locationService = locationService;
+        this.rentalSchedulingService = rentalSchedulingService;
     }
 
     @GetMapping("/dashboard")
@@ -137,6 +140,13 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("errorMessage",
                     "An error occurred while deleting the location: " + e.getMessage());
         }
+        return "redirect:/admin/dashboard";
+    }
+
+    @PostMapping("/process-expired-rentals")
+    public String processExpiredRentals(RedirectAttributes redirectAttributes) {
+        rentalSchedulingService.manuallyProcessExpiredRentals();
+        redirectAttributes.addFlashAttribute("successMessage","Successfully processed expired rentals");
         return "redirect:/admin/dashboard";
     }
 }

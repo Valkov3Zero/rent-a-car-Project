@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import org.example.rentacar.rental.model.Rental;
+import org.example.rentacar.rental.model.RentalStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,4 +26,5 @@ public interface RentalRepository extends JpaRepository<Rental, UUID> {
             @Param("endDate") LocalDate endDate);
 
     List<Rental> findByUserId(UUID userId);
+    List<Rental> findByStatusInAndEndDateBefore(List<RentalStatus> status, LocalDate date);
 }

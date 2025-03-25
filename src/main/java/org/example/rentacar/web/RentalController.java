@@ -3,6 +3,7 @@ package org.example.rentacar.web;
 import jakarta.validation.Valid;
 import org.example.rentacar.exception.DomainException;
 import org.example.rentacar.rental.model.Rental;
+import org.example.rentacar.rental.repository.RentalRepository;
 import org.example.rentacar.rental.service.RentalService;
 import org.example.rentacar.security.AuthenticationDetails;
 import org.example.rentacar.user.model.User;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,12 +27,14 @@ public class RentalController {
 
     private final RentalService rentalService;
     private final UserService userService;
+    private final RentalRepository rentalRepository;
 
 
     @Autowired
-    public RentalController(RentalService rentalService, UserService userService) {
+    public RentalController(RentalService rentalService, UserService userService, RentalRepository rentalRepository) {
         this.rentalService = rentalService;
         this.userService = userService;
+        this.rentalRepository = rentalRepository;
     }
 
     @GetMapping
@@ -107,6 +112,8 @@ public class RentalController {
             return "redirect:/rentals";
         }
     }
+
+
 
 
 }
