@@ -387,24 +387,24 @@
 
     <footer class="footer" th:replace="~{fragments/commons::footer}"></footer>
     
-    <script>
-        // Ensure end date is after start date
-        document.getElementById('startDate').addEventListener('change', function() {
-            const startDate = this.value;
-            const endDateInput = document.getElementById('endDate');
-            
-            if (startDate) {
-                // Set min date for end date to be at least the start date + 1 day
-                const nextDay = new Date(startDate);
-                nextDay.setDate(nextDay.getDate() + 1);
-                endDateInput.min = nextDay.toISOString().split('T')[0];
-                
-                // If current end date is before new start date, reset it
-                if (endDateInput.value && new Date(endDateInput.value) <= new Date(startDate)) {
-                    endDateInput.value = nextDay.toISOString().split('T')[0];
-                }
-            }
-        });
-    </script>
+<!--    <script>-->
+<!--        // Ensure end date is after start date-->
+<!--        document.getElementById('startDate').addEventListener('change', function() {-->
+<!--            const startDate = this.value;-->
+<!--            const endDateInput = document.getElementById('endDate');-->
+<!--            -->
+<!--            if (startDate) {-->
+<!--                // Set min date for end date to be at least the start date + 1 day-->
+<!--                const nextDay = new Date(startDate);-->
+<!--                nextDay.setDate(nextDay.getDate() + 1);-->
+<!--                endDateInput.min = nextDay.toISOString().split('T')[0];-->
+<!--                -->
+<!--                // If current end date is before new start date, reset it-->
+<!--                if (endDateInput.value && new Date(endDateInput.value) <= new Date(startDate)) {-->
+<!--                    endDateInput.value = nextDay.toISOString().split('T')[0];-->
+<!--                }-->
+<!--            }-->
+<!--        });-->
+<!--    </script>-->
 </body>
 </html> 

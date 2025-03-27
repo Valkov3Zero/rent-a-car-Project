@@ -1,6 +1,7 @@
 package org.example.rentacar.user.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.rentacar.email.service.NotificationService;
 import org.example.rentacar.exception.DomainException;
 import org.example.rentacar.security.AuthenticationDetails;
 import org.example.rentacar.user.model.User;
@@ -26,11 +27,13 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationService notificationService;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, NotificationService notificationService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -50,7 +53,9 @@ public class UserService implements UserDetailsService {
                 .role(UserRole.CUSTOMER)
                 .isActive(true)
                 .build();
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        notificationService.sendWelcomeEmail(savedUser.getId(), savedUser.getEmail());
 
     }
 
