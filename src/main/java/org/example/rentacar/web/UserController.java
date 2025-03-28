@@ -1,8 +1,11 @@
 package org.example.rentacar.web;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.example.rentacar.creditCard.model.CreditCard;
 import org.example.rentacar.creditCard.service.CreditCardService;
+import org.example.rentacar.email.client.dto.NotificationDate;
+import org.example.rentacar.email.service.NotificationService;
 import org.example.rentacar.exception.DomainException;
 import org.example.rentacar.security.AuthenticationDetails;
 import org.example.rentacar.user.model.User;
@@ -23,17 +26,20 @@ import java.util.List;
 import java.util.UUID;
 
 
+@Slf4j
 @Controller
 @RequestMapping("/profile")
 public class UserController {
 
     private final UserService userService;
     private final CreditCardService creditCardService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public UserController(UserService userService, CreditCardService creditCardService) {
+    public UserController(UserService userService, CreditCardService creditCardService, NotificationService notificationService) {
         this.userService = userService;
         this.creditCardService = creditCardService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping
@@ -47,6 +53,13 @@ public class UserController {
         mav.addObject("user", user);
         mav.addObject("creditCards",creditCards);
         mav.addObject("newCreditCard", new CreditCardRequest());
+        try {
+            NotificationDate date = notificationService.getNotificationDate(user.getId());
+            mav.addObject("date", date);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
         return mav;
     }
     @GetMapping("/edit")

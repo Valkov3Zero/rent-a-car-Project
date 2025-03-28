@@ -2,8 +2,10 @@ package org.example.rentacar.email.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.rentacar.email.client.NotificationClient;
+import org.example.rentacar.email.client.dto.NotificationDate;
 import org.example.rentacar.email.client.dto.NotificationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -35,5 +37,9 @@ public class NotificationService {
         } catch (Exception e) {
             log.error("Error while sending Welcome email to {} error:{}",email, e.getMessage());
         }
+    }
+    public NotificationDate getNotificationDate (UUID userId) {
+       ResponseEntity<NotificationDate> httpResponse =  notificationClient.getNotificationDate(userId);
+       return httpResponse.getBody();
     }
 }
