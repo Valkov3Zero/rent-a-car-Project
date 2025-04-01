@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Rent-A-Car</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .header {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main {
+            flex: 1;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav li {
+            list-style-type: none;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: opacity 0.2s;
+        }
+
+        .nav a:hover {
+            opacity: 0.8;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #333;
+            text-align: center;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #444;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-content {
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-photo {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+
+        .team-info {
+            padding: 1.5rem;
+        }
+
+        .team-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-position {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-bio {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .value-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .value-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .value-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .value-description {
+            color: #666;
+            line-height: 1.5;
+        }
+        .footer {
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .team-grid, .values-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header" th:replace="~{fragments/commons::header}"></header>
+
+    <main class="main">
+        <h1 class="page-title">About Rent-A-Car</h1>
+
+        <section class="section">
+            <h2 class="section-title">Our Story</h2>
+            <div class="section-content">
+                <p>Rent-A-Car was founded in 2015 with a simple mission: to provide high-quality, affordable car rental services that make travel easy and enjoyable. What started as a small local business with just 10 vehicles has now grown into a nationwide service with a fleet of over 500 cars.</p>
+                <br>
+                <p>Our journey began when our founder, Alex Johnson, experienced frustration with existing car rental services during his business travels. He envisioned a more customer-friendly approach, with transparent pricing, flexible options, and exceptional service. Today, we continue to operate with those founding principles.</p>
+                <br>
+                <p>Over the years, we've expanded our services while maintaining our commitment to quality and customer satisfaction. We're proud of our growth and even prouder of the thousands of satisfied customers who choose us for their transportation needs.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Our Values</h2>
+            <div class="section-content">
+                <p>At Rent-A-Car, we believe in doing business the right way. Our values guide every decision we make and every interaction we have with our customers.</p>
+                
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon">⭐</div>
+                        <h3 class="value-title">Excellence</h3>
+                        <p class="value-description">We strive for excellence in everything we do, from the vehicles we offer to the service we provide.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">🤝</div>
+                        <h3 class="value-title">Reliability</h3>
+                        <p class="value-description">Our customers can count on us to deliver dependable vehicles and consistent service, every time.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">💼</div>
+                        <h3 class="value-title">Integrity</h3>
+                        <p class="value-description">We operate with transparency and honesty in all our business practices.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">🌿</div>
+                        <h3 class="value-title">Sustainability</h3>
+                        <p class="value-description">We're committed to reducing our environmental impact through eco-friendly practices and vehicles.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Our Team</h2>
+            <div class="section-content">
+                <p>Our success is driven by our dedicated team of professionals who are passionate about providing exceptional service.</p>
+                
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Alex Johnson" class="team-photo">
+                        <div class="team-info">
+                            <h3 class="team-name">Alex Johnson</h3>
+                            <p class="team-position">Founder & CEO</p>
+                            <p class="team-bio">With over 15 years in the automotive industry, Alex brings vision and leadership to our company.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Chen" class="team-photo">
+                        <div class="team-info">
+                            <h3 class="team-name">Sarah Chen</h3>
+                            <p class="team-position">Operations Director</p>
+                            <p class="team-bio">Sarah ensures that our daily operations run smoothly and that we maintain our high standards.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Marcus Rodriguez" class="team-photo">
+                        <div class="team-info">
+                            <h3 class="team-name">Marcus Rodriguez</h3>
+                            <p class="team-position">Fleet Manager</p>
+                            <p class="team-bio">Marcus oversees our vehicle inventory, ensuring that our cars are always in top condition.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/women/17.jpg" alt="Emily Thompson" class="team-photo">
+                        <div class="team-info">
+                            <h3 class="team-name">Emily Thompson</h3>
+                            <p class="team-position">Customer Service Lead</p>
+                            <p class="team-bio">Emily leads our customer service team, ensuring that every client receives exceptional care.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/commons::footer}"></footer>
+</body>
+</html> 
