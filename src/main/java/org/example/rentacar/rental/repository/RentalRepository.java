@@ -27,4 +27,5 @@ public interface RentalRepository extends JpaRepository<Rental, UUID> {
 
     List<Rental> findByUserId(UUID userId);
     List<Rental> findByStatusInAndEndDateBefore(List<RentalStatus> status, LocalDate date);
+    List<Rental> findByUserIdOrderByCreatedAtDesc(UUID userId);
 }

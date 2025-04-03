@@ -134,7 +134,7 @@ public class RentalService {
     }
 
     public List<Rental> getUserRentals(UUID userId) {
-        return rentalRepository.findByUserId(userId);
+        return rentalRepository.findByUserIdOrderByCreatedAtDesc(userId);
     }
 
     public Rental getRentalById(UUID rentalId) {

@@ -29,7 +29,7 @@ public class Car {
     @Column(nullable = false)
     private String model;
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "`year`")
     private int year;
 
     @Column(nullable = false,unique = true)

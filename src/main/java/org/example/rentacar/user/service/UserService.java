@@ -39,9 +39,19 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void register (RegisterRequest registerRequest) {
 
-        Optional<User> userOptional = userRepository.findByUsername(registerRequest.getUsername());
-        if (userOptional.isPresent()) {
+        Optional<User> userWithUsername = userRepository.findByUsername(registerRequest.getUsername());
+        if (userWithUsername.isPresent()) {
             throw new DomainException("Username already exists");
+        }
+
+        Optional<User> userWithEmail = userRepository.findByEmail(registerRequest.getEmail());
+        if (userWithEmail.isPresent()) {
+            throw new DomainException("Email address already in use");
+        }
+
+        Optional<User> userWithPhone = userRepository.findByPhone(registerRequest.getPhoneNumber());
+        if (userWithPhone.isPresent()) {
+            throw new DomainException("Phone number already in use");
         }
         User user = User.builder()
                 .username(registerRequest.getUsername())

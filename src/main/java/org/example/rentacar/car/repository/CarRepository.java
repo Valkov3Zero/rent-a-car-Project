@@ -1,6 +1,5 @@
 package org.example.rentacar.car.repository;
 
-import jakarta.validation.constraints.NotBlank;
 import org.example.rentacar.car.model.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

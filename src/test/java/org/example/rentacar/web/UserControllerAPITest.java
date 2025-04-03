@@ -179,4 +179,88 @@ public class UserControllerAPITest {
 
         verify(userService).updateProfile(eq(userId), any(ProfileUpdateRequest.class));
     }
+
+    @Test
+    void addFunds_ShouldAddFundsAndRedirect() throws Exception {
+
+        when(userService.getById(userId)).thenReturn(testUser);
+        doNothing().when(creditCardService).addFunds(eq(cardId), any(BigDecimal.class), eq(testUser));
+
+        mockMvc.perform(post("/profile/cards/{cardId}/add-funds", cardId)
+                        .with(user(authDetails))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/profile"))
+                .andExpect(flash().attributeExists("successMessage"));
+
+        verify(userService).getById(userId);
+        verify(creditCardService).addFunds(eq(cardId), any(BigDecimal.class), eq(testUser));
+    }
+
+
+    @Test
+    void deleteCreditCard_ShouldDeleteAndRedirect() throws Exception {
+
+        when(userService.getById(userId)).thenReturn(testUser);
+        doNothing().when(creditCardService).deleteCreditCard(cardId, testUser);
+
+        mockMvc.perform(post("/profile/cards/{cardId}/delete", cardId)
+                        .with(user(authDetails))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/profile"))
+                .andExpect(flash().attributeExists("successMessage"));
+
+        verify(userService).getById(userId);
+        verify(creditCardService).deleteCreditCard(cardId, testUser);
+    }
+    @Test
+    void addCreditCard_WithValidData_ShouldRedirectToProfile() throws Exception {
+
+        CreditCardRequest cardRequest = new CreditCardRequest();
+        cardRequest.setCardNumber("9876543210987654");
+        cardRequest.setCardholderName("John Doe");
+        cardRequest.setExpirationDate("12/25");
+
+        when(userService.getById(userId)).thenReturn(testUser);
+        doNothing().when(creditCardService).addCreditCard(any(CreditCardRequest.class), eq(testUser));
+
+        mockMvc.perform(post("/profile/cards/add")
+                        .with(user(authDetails))
+                        .with(csrf())
+                        .param("cardNumber", cardRequest.getCardNumber())
+                        .param("cardholderName", cardRequest.getCardholderName())
+                        .param("expirationDate", cardRequest.getExpirationDate()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/profile"))
+                .andExpect(flash().attributeExists("successMessage"));
+
+        verify(userService).getById(userId);
+        verify(creditCardService).addCreditCard(any(CreditCardRequest.class), eq(testUser));
+    }
+    @Test
+    void addCreditCard_WithInvalidData_ShouldReturnProfilePage() throws Exception {
+
+        when(userService.getById(userId)).thenReturn(testUser);
+        when(creditCardService.getUserCreditCards(testUser)).thenReturn(Arrays.asList(testCreditCard));
+        when(notificationService.getNotificationDate(userId)).thenReturn(NotificationDate.builder()
+                .createdOn(LocalDateTime.now())
+                .build());
+
+        mockMvc.perform(post("/profile/cards/add")
+                        .with(user(authDetails))
+                        .with(csrf())
+                        .param("cardNumber", "") // Empty card number - invalid
+                        .param("cardholderName", "John Doe")
+                        .param("expirationDate", "12/25"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("profile"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("creditCards"))
+                .andExpect(model().attributeExists("newCreditCard"));
+
+        verify(userService).getById(userId);
+        verify(creditCardService).getUserCreditCards(testUser);
+        verify(creditCardService, never()).addCreditCard(any(CreditCardRequest.class), any(User.class));
+    }
 }

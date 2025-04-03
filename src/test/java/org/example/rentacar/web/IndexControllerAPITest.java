@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,7 +77,10 @@ public class IndexControllerAPITest {
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        String viewName = indexController.processRegister(invalidRequest, bindingResult);
+        Model model = mock(Model.class);
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+
+        String viewName = indexController.processRegister(invalidRequest, bindingResult, model, redirectAttributes);
 
         verify(userService, never()).register(any(RegisterRequest.class));
         assertEquals("register", viewName);

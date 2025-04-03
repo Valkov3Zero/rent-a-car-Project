@@ -1,6 +1,5 @@
 package org.example.rentacar.config;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         http
                 .authorizeHttpRequests(matchers -> matchers
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/","/register").permitAll()
+                        .requestMatchers("/","/register","/about","contact").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
@@ -36,26 +35,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
         return http.build();
 
-//        http
-//                .authorizeHttpRequests(matchers -> matchers
-//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-//                        .requestMatchers("/","/register", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-//                        .requestMatchers("/cars", "/cars/**").authenticated() // Allow both CUSTOMER and ADMIN access to all car URLs
-//                        .requestMatchers("/admin/**").hasAuthority("ADMIN") // Restrict admin URLs to ADMIN users only
-//                        .anyRequest().authenticated())
-//                .formLogin(formLogin -> formLogin
-//                        .loginPage("/login")
-//                        .usernameParameter("username")
-//                        .passwordParameter("password")
-//                        .defaultSuccessUrl("/profile",true)
-//                        .failureUrl("/login?error")
-//                        .permitAll()
-//                )
-//                .logout(logout -> logout
-//                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))
-//                        .logoutSuccessUrl("/"))
-//        ;
-//
-//        return http.build();
+
     }
 }

@@ -64,9 +64,7 @@ public class PaymentController {
             model.addAttribute("rental", rental);
             model.addAttribute("user", user);
 
-//            PaymentRequest paymentRequest = new PaymentRequest();
-//            paymentRequest.setRentalId(rental.getId());
-//            model.addAttribute("paymentRequest", paymentRequest);
+
             return "payment-form";
         }catch (DomainException e){
             redirectAttributes.addFlashAttribute("errorMessage",e.getMessage());

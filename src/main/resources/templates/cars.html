@@ -326,63 +326,6 @@
             <p class="page-description">Find the perfect car for your needs from our wide selection.</p>
         </div>
         
-        <!-- Future feature: Filter form 
-        <div class="filters">
-            <h2 class="filters-title">Filter Cars</h2>
-            <form class="filter-form" action="/cars" method="get">
-                <div>
-                    <div class="form-group">
-                        <label class="form-label" for="brand">Brand</label>
-                        <select id="brand" name="brand" class="form-select">
-                            <option value="">All Brands</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="model">Model</label>
-                        <input type="text" id="model" name="model" class="form-control" placeholder="Any model">
-                    </div>
-                </div>
-                <div>
-                    <div class="form-group">
-                        <label class="form-label" for="year">Year</label>
-                        <select id="year" name="year" class="form-select">
-                            <option value="">Any Year</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="status">Status</label>
-                        <select id="status" name="status" class="form-select">
-                            <option value="">Any Status</option>
-                            <option value="AVAILABLE">Available</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <div class="form-group">
-                        <label class="form-label" for="minPrice">Min Price</label>
-                        <input type="number" id="minPrice" name="minPrice" class="form-control" placeholder="$0">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="maxPrice">Max Price</label>
-                        <input type="number" id="maxPrice" name="maxPrice" class="form-control" placeholder="No limit">
-                    </div>
-                </div>
-                <div>
-                    <div class="form-group">
-                        <label class="form-label" for="sort">Sort By</label>
-                        <select id="sort" name="sort" class="form-select">
-                            <option value="price_asc">Price: Low to High</option>
-                            <option value="price_desc">Price: High to Low</option>
-                            <option value="year_desc">Year: Newest First</option>
-                            <option value="year_asc">Year: Oldest First</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="button-primary" style="margin-top: 1.5rem;">Apply Filters</button>
-                </div>
-            </form>
-        </div>
-        -->
-        
         <div th:if="${cars != null && !cars.isEmpty()}" class="cars-grid">
             <div th:each="car : ${cars}" class="car-card">
                 <div class="car-image">

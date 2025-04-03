@@ -1,14 +1,11 @@
 package org.example.rentacar.web;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.example.rentacar.security.AuthenticationDetails;
-import org.example.rentacar.user.model.User;
+import org.example.rentacar.exception.DomainException;
 import org.example.rentacar.user.service.UserService;
 import org.example.rentacar.web.dto.LoginRequest;
 import org.example.rentacar.web.dto.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,8 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.UUID;
 
 @Controller
 public class IndexController {
@@ -43,12 +40,24 @@ public class IndexController {
         return mav;
     }
     @PostMapping("/register")
-    public String processRegister(@Valid RegisterRequest registerRequest, BindingResult bindingResult) {
+    public String processRegister(@Valid RegisterRequest registerRequest,
+                                  BindingResult bindingResult,
+                                  Model model,
+                                  RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "register";
         }
-        userService.register(registerRequest);
-        return "redirect:/login";
+
+        try {
+            userService.register(registerRequest);
+            redirectAttributes.addFlashAttribute("successMessage", "Registration successful! Please log in.");
+            return "redirect:/login";
+        } catch (DomainException e) {
+
+            model.addAttribute("registerRequest", registerRequest);
+            model.addAttribute("errorMessage", e.getMessage());
+            return "register";
+        }
     }
 
     @GetMapping("/login")

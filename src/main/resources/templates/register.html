@@ -90,6 +90,11 @@
 <body>
     <div class="signin-card">
         <h1 class="signin-title">Sign In</h1>
+
+        <div th:if="${errorMessage}" style="margin-bottom: 1rem; color: #ef4444; background-color: #fee2e2; padding: 0.75rem; border-radius: 4px; font-size: 0.875rem;">
+            <p th:text="${errorMessage}">Error message will be displayed here</p>
+        </div>
+
         <form th:action="@{/register}" th:method="POST" th:object="${registerRequest}">
             <div class="form-group">
                 <label for="username" class="form-label">Username</label>
